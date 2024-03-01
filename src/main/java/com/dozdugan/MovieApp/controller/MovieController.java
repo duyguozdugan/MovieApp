@@ -3,15 +3,11 @@ package com.dozdugan.MovieApp.controller;
 import com.dozdugan.MovieApp.dto.request.MovieRequest;
 import com.dozdugan.MovieApp.dto.response.MovieResponse;
 import com.dozdugan.MovieApp.service.MovieService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RequestMapping("v1/api/movies")
 @RequiredArgsConstructor
 @RestController
 public class MovieController {
@@ -25,5 +21,20 @@ public class MovieController {
     @GetMapping()
     public List<MovieResponse> getAlMovies(){
         return movieService.getAllMovies();
+    }
+
+    @GetMapping("/{id}")
+    public MovieResponse getMovieById(@PathVariable Long id){
+        return movieService.getMovieById(id);
+    }
+
+    @PutMapping("/{id}")
+    public String updateMovie(@PathVariable Long id,@RequestBody MovieRequest movieRequest){
+        return movieService.updateMovie(id, movieRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteMovie(@PathVariable Long id){
+        movieService.deleteMovie(id);
     }
 }
