@@ -3,8 +3,11 @@ package com.dozdugan.MovieApp.controller;
 import com.dozdugan.MovieApp.dto.request.UserRequest;
 import com.dozdugan.MovieApp.dto.response.UserResponse;
 import com.dozdugan.MovieApp.model.User;
+import com.dozdugan.MovieApp.model.WatchList;
 import com.dozdugan.MovieApp.service.UserService;
+import com.dozdugan.MovieApp.service.WatchlistService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +34,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id,@RequestBody UserRequest userRequest){
         return userService.updateUser(id,userRequest);
@@ -40,5 +44,6 @@ public class UserController {
     public void deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
     }
+
 
 }

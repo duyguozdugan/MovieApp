@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,7 +22,26 @@ public class User {
     //bir user'ın birden fazla izleme listesi olabilir. bir izleme listesinin bir user'ı olabilir.
     // yani user department gibi düşünülebilir, watchlist'te employee.
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",
+               cascade = {CascadeType.ALL})
     private List<WatchList> watchLists;
 
+    public User() {
+    }
+
+    public User(String name, String username, String mail, String password) {
+        this.name = name;
+        this.username = username;
+        this.mail = mail;
+        this.password = password;
+    }
+
+    public void add(WatchList  tempwatchList){
+         if(watchLists==null){
+             watchLists=new ArrayList<>();
+         }
+
+         watchLists.add(tempwatchList);
+         tempwatchList.setUser(this);
+    }
 }

@@ -6,9 +6,12 @@ import com.dozdugan.MovieApp.dto.response.UserResponse;
 import com.dozdugan.MovieApp.exception.UserNotFoundException;
 import com.dozdugan.MovieApp.exception.UsernameAlreadyExistsException;
 import com.dozdugan.MovieApp.model.User;
+import com.dozdugan.MovieApp.model.WatchList;
 import com.dozdugan.MovieApp.repository.UserRepository;
+import com.dozdugan.MovieApp.repository.WatchlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +21,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final WatchlistRepository watchlistRepository;
 
     public UserResponse createUser(UserRequest userRequest) {
         Optional<User> userByName= userRepository.findByUsername(userRequest.getUsername());
@@ -31,7 +35,7 @@ public class UserService {
         return UserConverter.convertListUserResponse(userRepository.findAll()) ;
     }
 
-    public UserResponse getUserById(Long id) {
+     public UserResponse getUserById(Long id) {
         Optional<User> userOptional=userRepository.findById(id);
         if(userOptional.isPresent()){
             return UserConverter.convertToUserResponse(userOptional.get());
@@ -39,8 +43,6 @@ public class UserService {
         else{
             throw new UserNotFoundException("User not found with id: "+id);
         }
-
-
     }
 
     public String updateUser(Long id, UserRequest userRequest) {
@@ -60,4 +62,5 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
 }

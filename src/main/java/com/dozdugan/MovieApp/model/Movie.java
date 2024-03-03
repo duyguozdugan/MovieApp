@@ -21,6 +21,22 @@ public class Movie {
     private LocalDate relasedDate;
     private Double rating;
 
-    @ManyToMany(mappedBy = "movies")
-    private List<WatchList> watchLists;
+    @ManyToMany
+    @JoinTable(
+            name = "movie_genre",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private List<WatchList> WatchList;
+
+    public void addWatchList(WatchList watchList){
+        WatchList.add(watchList);
+    }
+
+    public void removeWatchList(WatchList watchList){
+        WatchList.remove(watchList);
+    }
+
+
+
+
 }

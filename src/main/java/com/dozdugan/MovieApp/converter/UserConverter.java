@@ -25,6 +25,7 @@ public class UserConverter{
         userResponse.setName(user.getName());
         userResponse.setUsername(user.getUsername());
         userResponse.setMail(user.getMail());
+        userResponse.setWatchLists(user.getWatchLists());
         return userResponse;
     }
 
@@ -36,6 +37,7 @@ public class UserConverter{
             userResponse.setName(user.getName());
             userResponse.setUsername(user.getUsername());
             userResponse.setMail(user.getMail());
+            userResponse.setWatchLists(user.getWatchLists());
             userResponses.add(userResponse);
         }
 
