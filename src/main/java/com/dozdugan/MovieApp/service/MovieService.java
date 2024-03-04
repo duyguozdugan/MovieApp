@@ -1,12 +1,19 @@
 package com.dozdugan.MovieApp.service;
 
 import com.dozdugan.MovieApp.converter.MovieConverter;
+import com.dozdugan.MovieApp.converter.UserConverter;
 import com.dozdugan.MovieApp.dto.request.MovieRequest;
 import com.dozdugan.MovieApp.dto.response.MovieResponse;
 import com.dozdugan.MovieApp.exception.MovieAlreadyExistsException;
 import com.dozdugan.MovieApp.exception.MovieNotFoundException;
+import com.dozdugan.MovieApp.exception.UserNotFoundException;
+import com.dozdugan.MovieApp.exception.WatchlistNotFoundException;
 import com.dozdugan.MovieApp.model.Movie;
+import com.dozdugan.MovieApp.model.User;
+import com.dozdugan.MovieApp.model.WatchList;
 import com.dozdugan.MovieApp.repository.MovieRepository;
+import com.dozdugan.MovieApp.repository.UserRepository;
+import com.dozdugan.MovieApp.repository.WatchlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +25,23 @@ import java.util.Optional;
 public class MovieService {
 
     private final MovieRepository movieRepository;
+    private final WatchlistRepository watchlistRepository;
+    private final UserRepository userRepository;
 
-    public MovieResponse createMovie(MovieRequest movieRequest) {
-        Optional<Movie> movieByName = movieRepository.findByTitle(movieRequest.getTitle());
-        if(movieByName.isPresent()){
-            if( movieRepository.findByRelasedDate(movieByName.get().getRelasedDate()).isPresent()){
-                throw new MovieAlreadyExistsException("Movie alreadt exists with name and relased date: "+ movieByName.get().getTitle() + movieByName.get().getRelasedDate());
-            }
-        }
-        return  MovieConverter.convertToMovieResponse(movieRepository.save(MovieConverter.convertToMovie(movieRequest)));
-    }
+     public String createMovie(Long watchlistId, MovieRequest movieRequest){
+
+         Optional<WatchList> optionalWatchList= watchlistRepository.findById(watchlistId);
+         if (optionalWatchList.isPresent()){
+             Movie movie= MovieConverter.convertToMovie(movieRequest);
+             optionalWatchList.get().addMovie(movie);
+             movieRepository.save(movie);
+             return "Movie created successfully.";
+         }
+         else{
+             throw new WatchlistNotFoundException("Watchlist not found with id: "+watchlistId);
+         }
+
+     }
 
 
     public List<MovieResponse> getAllMovies() {

@@ -1,10 +1,12 @@
 package com.dozdugan.MovieApp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,22 +23,20 @@ public class Movie {
     private LocalDate relasedDate;
     private Double rating;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
-            name = "movie_genre",
+            name = "watchlist_movie",
             joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private List<WatchList> WatchList;
+            inverseJoinColumns = @JoinColumn(name = "watchlist_id"))
+    @JsonIgnore
+    private List<WatchList> watchlists;
 
-    public void addWatchList(WatchList watchList){
-        WatchList.add(watchList);
-    }
+   public void addWatchlist(WatchList watchlist){
 
-    public void removeWatchList(WatchList watchList){
-        WatchList.remove(watchList);
-    }
+       if(watchlists==null){
+           watchlists=new ArrayList<>();
+       }
 
-
-
-
+         watchlists.add(watchlist);
+   }
 }

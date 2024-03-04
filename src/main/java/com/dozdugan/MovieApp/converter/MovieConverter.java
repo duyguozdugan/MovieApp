@@ -11,8 +11,6 @@ import java.util.List;
 @UtilityClass
 public class MovieConverter {
 
-
-
     public static Movie convertToMovie(MovieRequest movieRequest){
         Movie movie = new Movie();
         movie.setTitle(movieRequest.getTitle());

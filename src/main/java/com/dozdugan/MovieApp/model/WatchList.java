@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 @Getter
 @Setter
@@ -26,14 +27,17 @@ public class WatchList {
     @JsonIgnore
     private User user;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
-            name = "movie_watchlist",
+            name = "watchlist_movie",
             joinColumns = @JoinColumn(name = "watchlist_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id"))
     private List<Movie> movies;
 
     public void addMovie(Movie movie){
+        if(movies == null){
+            movies = new ArrayList<>();
+        }
         movies.add(movie);
     }
 

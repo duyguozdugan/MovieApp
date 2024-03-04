@@ -13,9 +13,9 @@ import java.util.List;
 public class MovieController {
     private final MovieService movieService;
 
-    @PostMapping()
-    public MovieResponse createMovie(@RequestBody MovieRequest movieRequest){
-        return movieService.createMovie(movieRequest);
+    @PostMapping("/{watchlistId}")
+    public String createMovie(@PathVariable Long watchlistId, @RequestBody MovieRequest movieRequest) {
+        return movieService.createMovie(watchlistId,movieRequest);
     }
 
     @GetMapping()
