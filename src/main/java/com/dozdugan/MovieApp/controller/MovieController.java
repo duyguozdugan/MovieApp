@@ -13,9 +13,19 @@ import java.util.List;
 public class MovieController {
     private final MovieService movieService;
 
-    @PostMapping("/{watchlistId}")
+    /* @PostMapping("/{watchlistId}")
     public String createMovie(@PathVariable Long watchlistId, @RequestBody MovieRequest movieRequest) {
         return movieService.createMovie(watchlistId,movieRequest);
+    } */
+
+    @PostMapping()
+    public String createMovie(@RequestBody MovieRequest movieRequest){
+        return movieService.createMovie(movieRequest);
+    }
+
+    @PutMapping("/status/{id}")
+    public  String changeIsWatchedStatus(@PathVariable Long id,@RequestParam String status){
+        return movieService.changeIsWatched(id,status);
     }
 
     @GetMapping()
@@ -34,7 +44,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMovie(@PathVariable Long id){
-        movieService.deleteMovie(id);
+    public String deleteMovie(@PathVariable Long id){
+        return movieService.deleteMovie(id);
     }
 }

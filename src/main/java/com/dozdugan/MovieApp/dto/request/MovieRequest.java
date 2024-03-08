@@ -14,6 +14,4 @@ public class MovieRequest {
     private String description;
     private LocalDate relasedDate;
     private Double rating;
-    private List<WatchList> watchlists;
-
 }

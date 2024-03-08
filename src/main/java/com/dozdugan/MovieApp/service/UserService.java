@@ -21,7 +21,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final WatchlistRepository watchlistRepository;
 
     public UserResponse createUser(UserRequest userRequest) {
         Optional<User> userByName= userRepository.findByUsername(userRequest.getUsername());
@@ -54,13 +53,14 @@ public class UserService {
             oldUser.setUsername(userRequest.getUsername());
             oldUser.setPassword(userRequest.getPassword());
             userRepository.save(oldUser);
-            return "Update successful.";
+            return "User was updated successfully.";
         }
-        return "Update failed.";
+        return "User update failed.";
     }
 
-    public void deleteUser(Long id) {
+    public String deleteUser(Long id) {
         userRepository.deleteById(id);
+       return "User was deleted successfully.";
     }
 
 }

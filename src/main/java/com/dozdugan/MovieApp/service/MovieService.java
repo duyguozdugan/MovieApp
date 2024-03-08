@@ -1,22 +1,16 @@
 package com.dozdugan.MovieApp.service;
 
 import com.dozdugan.MovieApp.converter.MovieConverter;
-import com.dozdugan.MovieApp.converter.UserConverter;
 import com.dozdugan.MovieApp.dto.request.MovieRequest;
 import com.dozdugan.MovieApp.dto.response.MovieResponse;
-import com.dozdugan.MovieApp.exception.MovieAlreadyExistsException;
 import com.dozdugan.MovieApp.exception.MovieNotFoundException;
-import com.dozdugan.MovieApp.exception.UserNotFoundException;
-import com.dozdugan.MovieApp.exception.WatchlistNotFoundException;
+import com.dozdugan.MovieApp.model.IsWatched;
 import com.dozdugan.MovieApp.model.Movie;
-import com.dozdugan.MovieApp.model.User;
-import com.dozdugan.MovieApp.model.WatchList;
 import com.dozdugan.MovieApp.repository.MovieRepository;
 import com.dozdugan.MovieApp.repository.UserRepository;
 import com.dozdugan.MovieApp.repository.WatchlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +19,8 @@ import java.util.Optional;
 public class MovieService {
 
     private final MovieRepository movieRepository;
-    private final WatchlistRepository watchlistRepository;
-    private final UserRepository userRepository;
-
-     public String createMovie(Long watchlistId, MovieRequest movieRequest){
-
+   // Watchlist id'ye göre ekleme
+   /*  public String createMovie(Long watchlistId, MovieRequest movieRequest){
          Optional<WatchList> optionalWatchList= watchlistRepository.findById(watchlistId);
          if (optionalWatchList.isPresent()){
              Movie movie= MovieConverter.convertToMovie(movieRequest);
@@ -39,10 +30,29 @@ public class MovieService {
          }
          else{
              throw new WatchlistNotFoundException("Watchlist not found with id: "+watchlistId);
-         }
+}
+     } */
 
-     }
+    public String createMovie(MovieRequest movieRequest){
+        movieRepository.save(MovieConverter.convertToMovie(movieRequest));
+        return "Movie is created is successfully.";
+    }
+    public String changeIsWatched(Long id, String trueOrFalse) {
+        Optional<Movie> movieOptional = movieRepository.findById(id);
 
+        if (movieOptional.isPresent()) { // Filmin varlığını kontrol et
+            Movie movie = movieOptional.get();
+            if (trueOrFalse.toLowerCase().equals("true")) {
+                movie.setIsWatched(IsWatched.TRUE);
+            } else {
+                movie.setIsWatched(IsWatched.FALSE);
+            }
+            movieRepository.save(movie); // Değiştirilen filmi kaydet
+            return "Changes saved.";
+        } else {
+            throw new MovieNotFoundException("Movie not found with id: "+id);
+        }
+    }
 
     public List<MovieResponse> getAllMovies() {
         return MovieConverter.convertListMovieResponse(movieRepository.findAll());
@@ -67,15 +77,15 @@ public class MovieService {
             oldMovie.setRating(movieRequest.getRating());
             oldMovie.setRelasedDate(movieRequest.getRelasedDate());
             movieRepository.save(oldMovie);
-            return "Update succesfull.";
+            return "Movie was updated successfully.";
         }
-        return "Update failed.";
+        return "Movie update failed.";
     }
 
 
-    public void deleteMovie(Long id) {
+    public String deleteMovie(Long id) {
         movieRepository.deleteById(id);
+        return "Movie was deleted successfully";
     }
-
 
 }

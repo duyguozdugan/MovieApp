@@ -1,9 +1,9 @@
 package com.dozdugan.MovieApp.controller;
 
+import com.dozdugan.MovieApp.dto.request.WatchlistRequest;
 import com.dozdugan.MovieApp.model.WatchList;
 import com.dozdugan.MovieApp.service.WatchlistService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +26,8 @@ public class WatchlistController {
     }
 
     @PostMapping("/{id}")
-    public String createWatchlist(@PathVariable Long id, @RequestBody WatchList watchList){
-     return watchlistService.createWatchlist(id,watchList);
+    public String createWatchlist(@PathVariable Long id, @RequestBody WatchlistRequest watchlistRequest){
+     return watchlistService.createWatchlist(id,watchlistRequest);
    }
 
    @DeleteMapping("/{id}")
@@ -36,9 +36,12 @@ public class WatchlistController {
         }
 
    @PutMapping("/{id}")
-   public String updateWatchlist(@PathVariable Long id, @RequestBody WatchList watchList){
-     return watchlistService.updateWatchlist(id,watchList);
+   public String updateWatchlist(@PathVariable Long id, @RequestBody WatchlistRequest watchlistRequest){
+     return watchlistService.updateWatchlist(id,watchlistRequest);
     }
 
-
+   @PostMapping("/{watchlistId}/{movieId}")
+   public String addMovieToWatchlist(@PathVariable Long watchlistId,@PathVariable Long movieId){
+        return watchlistService.addMovieToWatchList(watchlistId,movieId);
+    }
 }

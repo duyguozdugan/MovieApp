@@ -23,6 +23,11 @@ public class Movie {
     private LocalDate relasedDate;
     private Double rating;
 
+  // İzlenme durumu
+    @Enumerated(EnumType.STRING)
+    private IsWatched isWatched=IsWatched.FALSE;
+
+
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "watchlist_movie",
@@ -32,7 +37,6 @@ public class Movie {
     private List<WatchList> watchlists;
 
    public void addWatchlist(WatchList watchlist){
-
        if(watchlists==null){
            watchlists=new ArrayList<>();
        }

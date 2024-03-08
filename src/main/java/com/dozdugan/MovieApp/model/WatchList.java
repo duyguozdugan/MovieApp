@@ -41,9 +41,7 @@ public class WatchList {
         movies.add(movie);
     }
 
-    public void removeMovie(Movie movie){
-        movies.remove(movie);
-    }
+
 
 
     public WatchList() {
